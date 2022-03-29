@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$/../.." vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Demo_Matplotlib_Python" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Image-Freehand" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Spiderman" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/UAV-3D-Result" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/WeiboSpider" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/plotly-choropleth-mapbox-demo" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/turtle_draw" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/手绘画" vcs="Git" />
+  </component>
+</project>
