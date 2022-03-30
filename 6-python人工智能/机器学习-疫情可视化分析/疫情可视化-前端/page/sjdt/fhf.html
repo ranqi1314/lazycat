@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>EasyWeb后台开发框架</title>
+		<link rel="stylesheet" href="../../assets/libs/layui/css/layui.css" />
+		<link rel="stylesheet" href="../../assets/module/admin.css?v=315" />
+		<!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	</head>
+
+	<body>
+
+		<!-- 正文开始 -->
+		<div class="layui-fluid">
+
+			<!-- 统计图表 -->
+			<div class="layui-row layui-col-space15">
+				<div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
+					<div class="layui-card">
+						<div class="layui-card-header">世界防护服预测</div>
+						<div class="layui-card-body">
+							<div id="hbyq" style="height: 433px;"></div>
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
+					<div class="layui-card">
+						<div class="layui-card-header">世界疫情预测</div>
+						<div class="layui-card-body">
+							<div id="gnyq" style="height: 433px;"></div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+
+		<!-- 加载动画 -->
+		<div class="page-loading">
+			<div class="ball-loader">
+				<span></span><span></span><span></span><span></span>
+			</div>
+		</div>
+
+		<!-- js部分 -->
+		<script type="text/javascript" src="../../assets/libs/layui/layui.js"></script>
+		<script type="text/javascript" src="../../assets/js/common.js?v=315"></script>
+		<script src="../../assets/libs/echarts/echarts.min.js"></script>
+		<script src="../../assets/libs/echarts/echartsTheme.js"></script>
+		<script src="../../assets/libs/echarts/echarts-wordcloud.js"></script>
+		<script src="../../map/js/china.js"></script>
+		<script>
+			layui.use(['layer', 'table', 'admin', 'form'], function() {
+				var $ = layui.jquery;
+				var layer = layui.layer;
+				var table = layui.table;
+				var admin = layui.admin;
+				var form = layui.form;
+
+				var myCharts1 = echarts.init(document.getElementById('hbyq'), myEchartsTheme);
+				var myCharts2 = echarts.init(document.getElementById('gnyq'), myEchartsTheme);
+				init();
+				function init() {
+					$.ajax({
+						type: 'GET',
+						url: 'http://127.0.0.1:5000/sjdt/nnfhf',
+						success: function(result) {
+							var option = {
+								tooltip: {
+									trigger: 'axis'
+								},
+								legend: {
+									color: ["#F58080", "#47D8BE", "#F9A589", "#0080FF"],
+									data: ['普通需求', 'ICU需求', '社会需求', '总需求'],
+									left: 'center',
+								},
+								grid: {
+									top: 'middle',
+									left: '3%',
+									right: '4%',
+									bottom: '3%',
+									height: '80%',
+									containLabel: true
+								},
+								xAxis: {
+									type: 'category',
+									data: result.x1,
+									axisLine: {
+										lineStyle: {
+											color: "#999"
+										}
+									}
+								},
+								yAxis: {
+									type: 'value',
+
+									splitLine: {
+										lineStyle: {
+											type: 'dashed',
+											color: '#DDD'
+										}
+									},
+									axisLine: {
+										show: false,
+										lineStyle: {
+											color: "#333"
+										},
+									},
+									nameTextStyle: {
+										color: "#999"
+									},
+									splitArea: {
+										show: false
+									}
+								},
+								series: [{
+										name: '普通需求',
+										type: 'line',
+										data: result.normal,
+										color: "#F58080",
+										lineStyle: {
+											normal: {
+												width: 5,
+												color: {
+													type: 'linear',
+
+													colorStops: [{
+														offset: 0,
+														color: '#FFCAD4' // 0% 处的颜色
+													}, {
+														offset: 0.4,
+														color: '#F58080' // 100% 处的颜色
+													}, {
+														offset: 1,
+														color: '#F58080' // 100% 处的颜色
+													}],
+													globalCoord: false // 缺省为 false
+												},
+												shadowColor: 'rgba(245,128,128, 0.5)',
+												shadowBlur: 10,
+												shadowOffsetY: 7
+											}
+										},
+										itemStyle: {
+											normal: {
+												color: '#F58080',
+												borderWidth: 10,
+												/*shadowColor: 'rgba(72,216,191, 0.3)',
+												 shadowBlur: 100,*/
+												borderColor: "#F58080"
+											}
+										},
+										smooth: true
+									},
+									{
+										name: 'ICU需求',
+										type: 'line',
+										data: result.ICU,
+										lineStyle: {
+											normal: {
+												width: 5,
+												color: {
+													type: 'linear',
+
+													colorStops: [{
+															offset: 0,
+															color: '#AAF487' // 0% 处的颜色
+														},
+														{
+															offset: 0.4,
+															color: '#47D8BE' // 100% 处的颜色
+														}, {
+															offset: 1,
+															color: '#47D8BE' // 100% 处的颜色
+														}
+													],
+													globalCoord: false // 缺省为 false
+												},
+												shadowColor: 'rgba(71,216,190, 0.5)',
+												shadowBlur: 10,
+												shadowOffsetY: 7
+											}
+										},
+										itemStyle: {
+											normal: {
+												color: '#AAF487',
+												borderWidth: 10,
+												/*shadowColor: 'rgba(72,216,191, 0.3)',
+												 shadowBlur: 100,*/
+												borderColor: "#AAF487"
+											}
+										},
+										smooth: true
+									},{
+										name: '社会需求',
+										type: 'line',
+										data: result.society,
+										color: "#0080FF",
+										lineStyle: {
+											normal: {
+												width: 5,
+												color: {
+													type: 'linear',
+
+													colorStops: [{
+														offset: 0,
+														color: '#46A3FF' // 0% 处的颜色
+													}, {
+														offset: 0.4,
+														color: '#0072E3' // 100% 处的颜色
+													}, {
+														offset: 1,
+														color: '#0080FF' // 100% 处的颜色
+													}],
+													globalCoord: false // 缺省为 false
+												},
+												shadowColor: 'rgb(65,105,225)',
+												shadowBlur: 10,
+												shadowOffsetY: 7
+											}
+										},
+										itemStyle: {
+											normal: {
+												color: '#0080FF',
+												borderWidth: 10,
+												/*shadowColor: 'rgba(72,216,191, 0.3)',
+												 shadowBlur: 100,*/
+												borderColor: "#0080FF"
+											}
+										},
+										smooth: true
+									},{
+										name: '总需求',
+										type: 'line',
+										data: result.count,
+										lineStyle: {
+											normal: {
+												width: 5,
+												color: {
+													type: 'linear',
+
+													colorStops: [{
+															offset: 0,
+															color: '#F6D06F' // 0% 处的颜色
+														},
+														{
+															offset: 0.4,
+															color: '#F9A589' // 100% 处的颜色
+														}, {
+															offset: 1,
+															color: '#F9A589' // 100% 处的颜色
+														}
+													],
+													globalCoord: false // 缺省为 false
+												},
+												shadowColor: 'rgba(249,165,137, 0.5)',
+												shadowBlur: 10,
+												shadowOffsetY: 7
+											}
+										},
+										itemStyle: {
+											normal: {
+												color: '#F6D06F',
+												borderWidth: 10,
+												/*shadowColor: 'rgba(72,216,191, 0.3)',
+												 shadowBlur: 100,*/
+												borderColor: "#F6D06F"
+											}
+										},
+										smooth: true
+									}
+								]
+							};
+							myCharts1.setOption(option)
+							
+							var colors = ['#5793f3', '#d14a61', '#675bba'];
+							var option = {
+								color: colors,
+								title: [{
+									text: '模型准确率' + result.mlp_score,
+									textStyle: {
+										color: '#2D3E53',
+										fontSize: 28
+									},
+									left: 20,
+									top: 20,
+								}],
+								tooltip: {
+									trigger: 'none',
+									axisPointer: {
+										type: 'cross'
+									}
+								},
+								legend: {
+									data: ['实际', '预测']
+								},
+								grid: {
+									top: 70,
+									bottom: 50
+								},
+								xAxis: [{
+										type: 'category',
+										axisTick: {
+											alignWithLabel: true
+										},
+										axisLine: {
+											onZero: false,
+											lineStyle: {
+												color: colors[1]
+											}
+										},
+										axisPointer: {
+											label: {
+												formatter: function(params) {
+													return '天数：  ' + params.value +
+														(params.seriesData.length ? '；人数：' + params.seriesData[0].data : '');
+												}
+											}
+										},
+										data: result.x1
+									},
+									{
+										type: 'category',
+										axisTick: {
+											alignWithLabel: true
+										},
+										axisLine: {
+											onZero: false,
+											lineStyle: {
+												color: colors[0]
+											}
+										},
+										axisPointer: {
+											label: {
+												formatter: function(params) {
+													return '天数：  ' + params.value +
+														(params.seriesData.length ? '；人数：' + params.seriesData[0].data : '');
+												}
+											}
+										},
+										data: result.x1
+									}
+								],
+								yAxis: [{
+									type: 'value'
+								}],
+								series: [{
+										name: '实际',
+										type: 'line',
+										xAxisIndex: 1,
+										smooth: true,
+										data: result.y_train
+									},
+									{
+										name: '预测',
+										type: 'line',
+										smooth: true,
+										data: result.result
+									}
+								]
+							};
+
+							myCharts2.setOption(option)
+						}
+					});
+
+				}
+
+				// 窗口大小改变事件
+				window.onresize = function() {
+					myCharts1.resize();
+					myCharts2.resize();
+				};
+
+			});
+		</script>
+	</body>
+
+</html>

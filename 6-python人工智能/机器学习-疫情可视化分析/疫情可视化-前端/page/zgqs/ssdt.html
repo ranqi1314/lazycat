@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>EasyWeb后台开发框架</title>
+		<link rel="stylesheet" href="../../assets/libs/layui/css/layui.css" />
+		<link rel="stylesheet" href="../../assets/module/admin.css?v=315" />
+		<!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	</head>
+
+	<body>
+
+		<!-- 正文开始 -->
+		<div class="layui-fluid">
+
+			<!-- 统计图表 -->
+			<div class="layui-row layui-col-space15">
+				<div class="layui-col-md12 layui-col-sm12 layui-col-xs12">
+					<div class="layui-card">
+						<div class="layui-card-header">历史确诊地图</div>
+						<div class="layui-card-body">
+							<div id="ssdt" style="height: 500px;"></div>
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
+					<div class="layui-card">
+						<div class="layui-card-header">当前确诊地图</div>
+						<div class="layui-card-body">
+							<div id="dqqz" style="height: 500px;"></div>
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
+					<div class="layui-card">
+						<div class="layui-card-header">历史死亡地图</div>
+						<div class="layui-card-body">
+							<div id="lssw" style="height: 500px;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 加载动画 -->
+		<div class="page-loading">
+			<div class="ball-loader">
+				<span></span><span></span><span></span><span></span>
+			</div>
+		</div>
+
+		<!-- js部分 -->
+		<script type="text/javascript" src="../../assets/libs/layui/layui.js"></script>
+		<script type="text/javascript" src="../../assets/js/common.js?v=315"></script>
+		<script src="../../assets/libs/echarts/echarts.min.js"></script>
+		<script src="../../assets/libs/echarts/echartsTheme.js"></script>
+		<script src="../../assets/libs/echarts/echarts-wordcloud.js"></script>
+		<script src="../../map/js/china.js"></script>
+		<script>
+			layui.use(['layer', 'table', 'admin', 'form'], function() {
+				var $ = layui.jquery;
+				var layer = layui.layer;
+				var table = layui.table;
+				var admin = layui.admin;
+				var form = layui.form;
+
+				var myCharts1 = echarts.init(document.getElementById('ssdt'), myEchartsTheme);
+				var myCharts2 = echarts.init(document.getElementById('dqqz'), myEchartsTheme);
+				var myCharts3 = echarts.init(document.getElementById('lssw'), myEchartsTheme);
+				init();
+
+				function init() {
+					$.ajax({
+						type: 'GET',
+						url: 'http://127.0.0.1:5000/ztqs/ssdt',
+						success: function(result) {
+							var days = result.time;
+							var province = result.provinces;
+							var data = result.confirmedCount;
+							var yqyData = [
+								days
+							]
+							var option = {
+								baseOption: {
+									timeline: {
+										axisType: 'category',
+										// realtime: false,
+										// loop: false,
+										autoPlay: true,
+										playInterval: 2000,
+										symbolSize: 12,
+										left: '5%',
+										right: '5%',
+										bottom: '0%',
+										width: '90%',
+										// controlStyle: {
+										//     position: 'left'
+										// },
+										data: days,
+										tooltip: {
+											formatter: days
+										},
+									},
+
+									tooltip: {
+										show: true,
+										formatter: function(params) {
+											return params.name + '：' + params.data['value']
+										},
+									},
+									visualMap: {
+										type: 'piecewise',
+										pieces: [{
+												min: 10000,
+												color: '#73240D'
+											},
+											{
+												min: 1000,
+												max: 9999,
+												color: '#BB0000'
+											},
+											{
+												min: 500,
+												max: 999,
+												color: '#BD430A'
+											},
+											{
+												min: 101,
+												max: 499,
+												color: '#E08150'
+											},
+											{
+												min: 11,
+												max: 100,
+												color: '#E9B090'
+											},
+											{
+												min: 1,
+												max: 10,
+												color: '#F2DDD2'
+											},
+											{
+												value: 0,
+												color: 'white'
+											}
+										],
+										orient: 'vertical',
+										itemWidth: 25,
+										itemHeight: 15,
+										showLabel: true,
+										seriesIndex: [0],
+										textStyle: {
+											color: '#7B93A7'
+										},
+										bottom: '10%',
+										left: "5%",
+									},
+									grid: [{
+											right: '5%',
+											top: '20%',
+											bottom: '10%',
+											width: '20%'
+										},
+										{
+											right: '54%',
+											top: '12%',
+											bottom: '75%',
+											width: '40%'
+										}
+
+									],
+									xAxis: [{
+										min: 0,
+										max: 68000,
+										show: false
+
+									}, {
+										axisTick: {
+											show: false,
+										},
+										axisLabel: {
+											show: false,
+										},
+										axisLine: {
+											show: false
+										},
+										splitLine: {
+											show: false
+										},
+										gridIndex: 1
+									}], //折线图x轴数据赋值，指定坐标信息,
+
+									yAxis: [{
+											inverse: true,
+
+											offset: '2',
+											'type': 'category',
+											data: '',
+											nameTextStyle: {
+												color: '#fff'
+											},
+											axisTick: {
+												show: false,
+											},
+											axisLabel: {
+												//rotate:45,
+												max: 68000,
+												textStyle: {
+													fontSize: 14,
+													color: '#000000',
+												},
+												interval: 0
+											},
+											axisLine: {
+												show: false,
+												lineStyle: {
+													color: '#333'
+												},
+											},
+											splitLine: {
+												show: false,
+												lineStyle: {
+													color: '#333'
+												}
+											},
+										},
+										{
+											inverse: false,
+											offset: '2',
+											'type': 'category',
+											max: 68000,
+											nameTextStyle: {
+												color: '#000'
+											},
+											axisTick: {
+												show: false,
+											},
+											axisLabel: {
+												max: 68000,
+												show: false,
+											},
+											axisLine: {
+												show: false
+											},
+											splitLine: {
+												show: false
+											},
+											gridIndex: 1
+										}
+									],
+									geo: {
+										map: 'china',
+										right: '35%',
+										left: '5%',
+										zoom: 0.7,
+										label: {
+											emphasis: {
+												show: true,
+											}
+										}
+									},
+									series: [{
+											name: 'mapSer',
+											type: 'map',
+											map: 'china',
+											roam: false,
+											geoIndex: 0,
+											label: {
+												show: false,
+											},
+										},
+										{
+											name: 'bar',
+											type: 'bar',
+											max: 68000,
+											zlevel: 2,
+											barWidth: '40%',
+											label: {
+												normal: {
+													show: true,
+													max: 68000,
+													fontSize: 14,
+													position: 'right',
+													formatter: '{c}'
+												}
+											},
+										}
+
+									],
+
+								},
+								animationDurationUpdate: 3000,
+								animationEasingUpdate: 'quinticInOut',
+								options: []
+							};
+							for(var n = 0; n < days.length; n++) {
+								var res = [];
+								for(j = 0; j < data[n].length; j++) {
+									res.push({
+										name: province[j],
+										value: data[n][j]
+									});
+								}
+								res.sort(function(a, b) {
+									return b.value - a.value;
+								}).slice(0, 6);
+
+								res.sort(function(a, b) {
+									return a.value - b.value;
+								});
+								var res1 = [];
+								var res2 = [];
+								for(t = 0; t < 10; t++) {
+									res1[t] = res[res.length - 1 - t].name;
+									res2[t] = res[res.length - 1 - t].value;
+								}
+
+								option.options.push({
+									title: [{
+											text: days[n] + '新型冠状病毒全国确诊感染人数' + result.QG_confirmedCount[n],
+											textStyle: {
+												color: '#2D3E53',
+												fontSize: 28
+											},
+											left: 20,
+											top: 20,
+										},
+										{
+											show: true,
+											text: '感染人数前十的省份',
+											textStyle: {
+												color: '#2D3E53',
+												fontSize: 18
+											},
+											right: '10%',
+											top: '15%'
+										}
+									],
+									yAxis: {
+										data: res1,
+
+									},
+									series: [{
+										type: 'map',
+										data: res
+									}, {
+										type: 'bar',
+										max: 68000,
+										data: res2,
+										itemStyle: {
+											normal: {
+												color: function(params) {
+													// build a color map as your need.
+													var colorList = [{
+															colorStops: [{
+																offset: 0,
+																color: '#FF0000' // 0% 处的颜色
+															}, {
+																offset: 1,
+																color: '#990000' // 100% 处的颜色
+															}]
+														},
+														{
+															colorStops: [{
+																offset: 0,
+																color: '#00C0FA' // 0% 处的颜色
+															}, {
+																offset: 1,
+																color: '#2F95FA' // 100% 处的颜色
+															}]
+														}
+													];
+													if(params.dataIndex < 3) {
+														return colorList[0]
+													} else {
+														return colorList[1]
+													}
+												},
+											}
+										},
+									}]
+								});
+							}
+							myCharts1.setOption(option)
+						}
+					});
+					$.ajax({
+						type: 'GET',
+						url: 'http://127.0.0.1:5000/ztqs/dqqz',
+						success: function(result) {
+							var days = result.time;
+							var province = result.provinces;
+							var data = result.confirmedCount;
+
+							var sum = []
+
+							var yqyData = [
+								days,
+								sum
+							]
+
+							var option = {
+								baseOption: {
+									timeline: {
+										axisType: 'category',
+										// realtime: false,
+										// loop: false,
+										autoPlay: false,
+										playInterval: 2000,
+										symbolSize: 12,
+										left: '5%',
+										right: '5%',
+										bottom: '0%',
+										width: '90%',
+										// controlStyle: {
+										//     position: 'left'
+										// },
+										data: days,
+										tooltip: {
+											formatter: days
+										},
+									},
+
+									tooltip: {
+										show: true,
+										formatter: function(params) {
+											return params.name + '：' + params.data['value']
+										},
+									},
+									visualMap: {
+										type: 'piecewise',
+										pieces: [{
+												min: 1001,
+												color: '#73240D'
+											},
+											{
+												min: 501,
+												max: 1000,
+												color: '#BB0000'
+											},
+											{
+												min: 251,
+												max: 500,
+												color: '#BD430A'
+											},
+											{
+												min: 101,
+												max: 250,
+												color: '#E08150'
+											},
+											{
+												min: 11,
+												max: 100,
+												color: '#E9B090'
+											},
+											{
+												min: 1,
+												max: 10,
+												color: '#F2DDD2'
+											},
+											{
+												value: 0,
+												color: 'white'
+											}
+										],
+										orient: 'vertical',
+										itemWidth: 25,
+										itemHeight: 15,
+										showLabel: true,
+										seriesIndex: [0],
+
+										textStyle: {
+											color: '#7B93A7'
+										},
+										bottom: '10%',
+										left: "5%",
+									},
+									grid: [{
+											right: '5%',
+											top: '20%',
+											bottom: '10%',
+											width: '20%'
+										},
+										{
+											right: '54%',
+											top: '12%',
+											bottom: '75%',
+											width: '40%'
+										}
+
+									],
+
+									xAxis: [{
+										min: 0,
+										max: 9000,
+										show: false
+									}, {
+										axisTick: {
+											show: false,
+										},
+										axisLabel: {
+											show: false,
+										},
+										axisLine: {
+											show: false
+										},
+										splitLine: {
+											show: false
+										},
+										gridIndex: 1
+									}], //折线图x轴数据赋值，指定坐标信息,
+									yAxis: [{
+												inverse: true,
+												offset: '2',
+												'type': 'category',
+												data: '',
+												nameTextStyle: {
+													color: '#fff'
+												},
+												axisTick: {
+													show: false,
+												},
+												axisLabel: {
+													show: false,
+													//rotate:45,
+													textStyle: {
+														fontSize: 14,
+														color: '#000000',
+													},
+													interval: 0
+												},
+												axisLine: {
+													show: false,
+													lineStyle: {
+														color: '#333'
+													},
+												},
+												splitLine: {
+													show: false,
+													lineStyle: {
+														color: '#333'
+													}
+												},
+											},
+
+											{
+												inverse: false,
+												offset: '2',
+												'type': 'category',
+												nameTextStyle: {
+													color: '#000'
+												},
+												axisTick: {
+													show: false,
+												},
+												axisLabel: {
+													//rotate:45,
+													show: false,
+													textStyle: {
+														fontSize: 14,
+														color: '#000000',
+													},
+													interval: 'auto'
+												},
+												axisLine: {
+													show: false,
+													lineStyle: {
+														color: '#333'
+													},
+												},
+												splitLine: {
+													show: false,
+													lineStyle: {
+														color: '#333'
+													}
+												},
+												gridIndex: 1
+											}
+										]
+
+										,
+									geo: {
+										map: 'china',
+										label: {
+											emphasis: {
+												show: false,
+											}
+										}
+									},
+									series: [{
+											name: 'mapSer',
+											type: 'map',
+											map: 'china',
+											roam: false,
+											geoIndex: 0,
+											label: {
+												show: false,
+											},
+										}
+
+									],
+
+								},
+								animationDurationUpdate: 3000,
+								animationEasingUpdate: 'quinticInOut',
+								options: []
+							};
+							for(var n = 0; n < days.length; n++) {
+								var res = [];
+								for(j = 0; j < data[n].length; j++) {
+									res.push({
+										name: province[j],
+										value: data[n][j]
+									});
+								}
+								res.sort(function(a, b) {
+									return b.value - a.value;
+								}).slice(0, 6);
+
+								res.sort(function(a, b) {
+									return a.value - b.value;
+								});
+								var res1 = [];
+								var res2 = [];
+								for(t = 0; t < 10; t++) {
+									res1[t] = res[res.length - 1 - t].name;
+									res2[t] = res[res.length - 1 - t].value;
+								}
+								option.options.push({
+									yAxis: {
+										data: res1,
+
+									},
+									series: [{
+										type: 'map',
+										data: res
+									}]
+								});
+							}
+							myCharts2.setOption(option)
+						}
+					})
+					$.ajax({
+						type: 'GET',
+						url: 'http://127.0.0.1:5000/ztqs/lssw',
+						success: function(result) {
+							var days = result.time;
+							var province = result.provinces;
+							var data = result.confirmedCount;
+
+							var sum = []
+
+							var yqyData = [
+								days,
+								sum
+							]
+
+							var option = {
+								baseOption: {
+									timeline: {
+										axisType: 'category',
+										// realtime: false,
+										// loop: false,
+										autoPlay: false,
+										playInterval: 2000,
+										symbolSize: 12,
+										left: '5%',
+										right: '5%',
+										bottom: '0%',
+										width: '90%',
+										// controlStyle: {
+										//     position: 'left'
+										// },
+										data: days,
+										tooltip: {
+											formatter: days
+										},
+									},
+
+									tooltip: {
+										show: true,
+										formatter: function(params) {
+											return params.name + '：' + params.data['value']
+										},
+									},
+									visualMap: {
+										type: 'piecewise',
+										pieces: [{
+												min: 1001,
+												color: '#73240D'
+											},
+											{
+												min: 501,
+												max: 1000,
+												color: '#BB0000'
+											},
+											{
+												min: 251,
+												max: 500,
+												color: '#BD430A'
+											},
+											{
+												min: 101,
+												max: 250,
+												color: '#E08150'
+											},
+											{
+												min: 11,
+												max: 100,
+												color: '#E9B090'
+											},
+											{
+												min: 1,
+												max: 10,
+												color: '#F2DDD2'
+											},
+											{
+												value: 0,
+												color: 'white'
+											}
+										],
+										orient: 'vertical',
+										itemWidth: 25,
+										itemHeight: 15,
+										showLabel: true,
+										seriesIndex: [0],
+
+										textStyle: {
+											color: '#7B93A7'
+										},
+										bottom: '10%',
+										left: "5%",
+									},
+									grid: [{
+											right: '5%',
+											top: '20%',
+											bottom: '10%',
+											width: '20%'
+										},
+										{
+											right: '54%',
+											top: '12%',
+											bottom: '75%',
+											width: '40%'
+										}
+
+									],
+
+									xAxis: [{
+										min: 0,
+										max: 9000,
+										show: false
+									}, {
+										axisTick: {
+											show: false,
+										},
+										axisLabel: {
+											show: false,
+										},
+										axisLine: {
+											show: false
+										},
+										splitLine: {
+											show: false
+										},
+										gridIndex: 1
+									}], //折线图x轴数据赋值，指定坐标信息,
+									yAxis: [{
+												inverse: true,
+												offset: '2',
+												'type': 'category',
+												data: '',
+												nameTextStyle: {
+													color: '#fff'
+												},
+												axisTick: {
+													show: false,
+												},
+												axisLabel: {
+													show: false,
+													//rotate:45,
+													textStyle: {
+														fontSize: 14,
+														color: '#000000',
+													},
+													interval: 0
+												},
+												axisLine: {
+													show: false,
+													lineStyle: {
+														color: '#333'
+													},
+												},
+												splitLine: {
+													show: false,
+													lineStyle: {
+														color: '#333'
+													}
+												},
+											},
+
+											{
+												inverse: false,
+												offset: '2',
+												'type': 'category',
+												nameTextStyle: {
+													color: '#000'
+												},
+												axisTick: {
+													show: false,
+												},
+												axisLabel: {
+													//rotate:45,
+													show: false,
+													textStyle: {
+														fontSize: 14,
+														color: '#000000',
+													},
+													interval: 'auto'
+												},
+												axisLine: {
+													show: false,
+													lineStyle: {
+														color: '#333'
+													},
+												},
+												splitLine: {
+													show: false,
+													lineStyle: {
+														color: '#333'
+													}
+												},
+												gridIndex: 1
+											}
+										]
+
+										,
+									geo: {
+										map: 'china',
+										label: {
+											emphasis: {
+												show: false,
+											}
+										}
+									},
+									series: [{
+											name: 'mapSer',
+											type: 'map',
+											map: 'china',
+											roam: false,
+											geoIndex: 0,
+											label: {
+												show: false,
+											},
+										}
+
+									],
+
+								},
+								animationDurationUpdate: 3000,
+								animationEasingUpdate: 'quinticInOut',
+								options: []
+							};
+							for(var n = 0; n < days.length; n++) {
+								var res = [];
+								for(j = 0; j < data[n].length; j++) {
+									res.push({
+										name: province[j],
+										value: data[n][j]
+									});
+								}
+								res.sort(function(a, b) {
+									return b.value - a.value;
+								}).slice(0, 6);
+
+								res.sort(function(a, b) {
+									return a.value - b.value;
+								});
+								var res1 = [];
+								var res2 = [];
+								for(t = 0; t < 10; t++) {
+									res1[t] = res[res.length - 1 - t].name;
+									res2[t] = res[res.length - 1 - t].value;
+								}
+								option.options.push({
+									yAxis: {
+										data: res1,
+
+									},
+									series: [{
+										type: 'map',
+										data: res
+									}]
+								});
+							}
+							myCharts3.setOption(option)
+						}
+					})
+				}
+
+				// 窗口大小改变事件
+				window.onresize = function() {
+					myCharts1.resize();
+					myCharts2.resize();
+					myCharts3.resize();
+				};
+
+			});
+		</script>
+	</body>
+
+</html>

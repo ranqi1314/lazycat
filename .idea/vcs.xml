@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/1-python网站/Django-Blog-Project" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/1-python网站/Django-框架/Django-Blog-Project" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/BilibiliDownloader" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/Get-data-tool" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/GetDouYinApplication" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/KugouMusicSpider" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/Music_get" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/XiaoNi_music" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/YinghuaDownloader" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/douyin_GetVideoData" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/douyin_bot" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/musicPlayer" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/pearvideo_crawler" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/pycode" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/reptile" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/spider_collection" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/wangyiyuan-" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/其他/JdSpider" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/其他/QuanMinKGe_reptile" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/文本/JdSpider" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/框架/KugouMusicSpider" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/视频/BilibiliDownloader" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/视频/GetDouYinApplication" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/视频/douyin_GetVideoData" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/视频/pearvideo_crawler" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/视频/reptile" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/音乐/全民K歌付费下载" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/音乐/全民K歌歌曲下载" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/2-python爬虫/音乐播放器" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/4-python数据分析/bigdata_analyse" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/4-python数据分析/bilibili_master" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/6-python人工智能/NBA-Visualization" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/8-其他/工具/XiaoNi_music" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/8-其他/工具/音乐播放器" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/8-其他/游戏/AngryBirds" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/8-其他/游戏/PlantsVsZombies" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/8-其他/游戏/TankWar" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/8-其他/游戏/ZhaJinHua" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/8-其他/游戏/fishingExpert" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/8-其他/游戏/jerkoff" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/8-其他/游戏/laoba" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/8-其他/游戏/my_world" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/8-其他/游戏/parkour" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/8-其他/画图/Demo_Matplotlib_Python" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/8-其他/画图/Image-Freehand" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/8-其他/画图/Spiderman" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/8-其他/画图/UAV-3D-Result" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/8-其他/画图/plotly-choropleth-mapbox-demo" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/pycode" vcs="Git" />
+  </component>
+</project>
